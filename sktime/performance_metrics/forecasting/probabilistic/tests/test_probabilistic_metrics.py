@@ -395,6 +395,6 @@ def test_sample_weight_probabilistic(metric, score_average):
         assert isinstance(eval_loss_weighted, float)
     else:
         assert isinstance(eval_loss_weighted, pd.Series)
-        
+
     # The weighted and unweighted loss should differ unless mathematically identical by coincidence
     assert not np.all(np.isclose(eval_loss_unweighted, eval_loss_weighted))
