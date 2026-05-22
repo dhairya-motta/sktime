@@ -117,6 +117,7 @@ def test_conformal_with_hierarchical():
 def test_conformal_predict_proba():
     """Test _predict_proba interface of ConformalIntervals."""
     from sktime.utils.dependencies import _check_soft_dependencies
+
     if not _check_soft_dependencies("skpro", severity="none"):
         pytest.skip("skpro is not available")
 
@@ -125,14 +126,15 @@ def test_conformal_predict_proba():
 
     conformal_forecaster = ConformalIntervals(forecaster)
     conformal_forecaster.fit(y, fh=[1, 2, 3])
-    
+
     pred_dist = conformal_forecaster.predict_proba()
-    
+
     assert check_is_mtype(pred_dist, "pred_proba", "Proba", msg_return_dict="list")
-    
+
     # Check that the distribution provides reasonable quantiles
     quantiles = pred_dist.quantile([0.1, 0.9])
     assert quantiles.shape == (3, 2)
+
 
 @pytest.mark.skipif(
     not run_test_for_class(ConformalIntervals),
@@ -144,6 +146,7 @@ def test_conformal_predict_proba():
 def test_conformal_predict_proba_methods(method):
     """Test that all methods work with predict_proba."""
     from sktime.utils.dependencies import _check_soft_dependencies
+
     if not _check_soft_dependencies("skpro", severity="none"):
         pytest.skip("skpro is not available")
 
@@ -152,6 +155,6 @@ def test_conformal_predict_proba_methods(method):
 
     conformal_forecaster = ConformalIntervals(forecaster, method=method)
     conformal_forecaster.fit(y, fh=[1, 2])
-    
+
     pred_dist = conformal_forecaster.predict_proba()
     assert pred_dist is not None

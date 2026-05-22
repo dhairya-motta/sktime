@@ -1,0 +1,24 @@
+**Reference Issues/PRs**
+Fixes #8217. (Also related to #5445 and #8229)
+
+**What does this implement/fix?**
+This officially enables `capability:insample = True` for the `DynamicFactor` model.
+
+Previously, if you tried to predict in-sample, the index mapping would break. Instead of rewriting everything, I just split the forecasting horizon (`fh`):
+- For past dates (in-sample): It grabs the Kalman smoother estimates directly from `statsmodels`'s `fittedvalues`.
+- For future dates (out-of-sample): It relies on the original `predict()` method.
+
+Gluing them together this way bypasses all the index mapping bugs that the previous attempt (PR #8229) ran into.
+
+**Does your contribution introduce a new dependency? If yes, which one?**
+Nope.
+
+**What should a reviewer concentrate their feedback on?**
+Just looking for feedback on whether this bucket-splitting approach makes sense to you guys.
+
+**Did you add any tests for the change?**
+Not manually. Letting the existing `TestAllForecasters` CI suite handle the heavy lifting across all the different Pandas indices!
+
+## PR checklist
+*(Left the essential ones checked!)*
+- [x] The PR title starts with either [ENH], [MNT], [DOC], or [BUG].

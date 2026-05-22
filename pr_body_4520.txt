@@ -1,0 +1,9 @@
+[ENH] Add full probabilistic interface to ConformalIntervals
+
+* Implements `_predict_proba` and `_predict_proba_series` for `ConformalIntervals`.
+* Provides full support for probabilistic predictions, returning a `skpro` `Empirical` distribution.
+* Evaluates correctly with `empirical`, `conformal`, `conformal_bonferroni`, and `empirical_residual` methods.
+* Inherits directly from existing residuals matrices without modifying interval calculations.
+* Includes necessary `pytest` unit-tests covering standard and parametrized setups.
+
+Fixes #4520

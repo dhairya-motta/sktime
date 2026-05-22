@@ -503,9 +503,7 @@ class TestAllForecasters(ForecasterFixtureGenerator, QuickTester):
         y_train = _make_series(n_columns=n_columns, index_type=index_type)
         estimator_instance.fit(y_train, fh=fh_int_oos)
         if estimator_instance.get_tag("capability:pred_int"):
-            is_monotonic = estimator_instance.get_tag(
-                "capability:pred_int:monotonic"
-            )
+            is_monotonic = estimator_instance.get_tag("capability:pred_int:monotonic")
             pred_ints = estimator_instance.predict_interval(
                 fh=fh_int_oos, coverage=coverage
             )
@@ -545,9 +543,7 @@ class TestAllForecasters(ForecasterFixtureGenerator, QuickTester):
         y_train = _make_series(n_columns=n_columns)
         estimator_instance.fit(y_train, fh=fh_int_oos)
         if estimator_instance.get_tag("capability:pred_int"):
-            is_monotonic = estimator_instance.get_tag(
-                "capability:pred_int:monotonic"
-            )
+            is_monotonic = estimator_instance.get_tag("capability:pred_int:monotonic")
             quantiles = estimator_instance.predict_quantiles(fh=fh_int_oos, alpha=alpha)
             _check_predict_quantiles(
                 quantiles,

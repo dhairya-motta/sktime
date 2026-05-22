@@ -1,0 +1,7 @@
+Fixes #8217. (Related #5445)
+
+Adds in-sample forecasting capability to `DynamicFactor` by splitting the forecasting horizon (`fh`).
+
+In-sample indices are pulled directly from `statsmodels.fittedvalues` (the Kalman smoothed estimates), while out-of-sample indices continue to use the standard `predict()` method. This safely bypasses the index alignment bugs without breaking existing pandas routing.
+
+*Happy to hear any thoughts if there's a cleaner internal way to handle the concatenation logic, still getting familiar with the codebase!*
