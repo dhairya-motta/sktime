@@ -271,7 +271,7 @@ class DynamicFactor(_StatsModelsAdapter):
             end_oos = int(outsample_idx[-1])
 
             if X is not None:
-                exog_part = X.iloc[:end_oos - n_train]
+                exog_part = X.iloc[: end_oos - n_train]
             else:
                 exog_part = None
 
@@ -356,7 +356,7 @@ class DynamicFactor(_StatsModelsAdapter):
         n_train = len(self._y) - 1
         if end > n_train:
             if X is not None:
-                exog_part = X.iloc[:end - n_train]
+                exog_part = X.iloc[: end - n_train]
             else:
                 exog_part = None
         else:
