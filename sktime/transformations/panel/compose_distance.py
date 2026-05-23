@@ -67,11 +67,12 @@ class DistanceFeatures(BaseTransformer):
         # we leave remember_data as False, since updating self._X in update
         # would increase the number of columns in the transform return
         "remember_data": False,
+        "capability:categorical_in_X": False,
         # CI and test flags
         # -----------------
         "tests:core": True,  # should tests be triggered by framework changes?
         # DistanceFeatures does ont work for hierarchical data, see #8077
-        "tests:skip_all": True,
+        # "tests:skip_all": True,
     }
 
     def __init__(self, distance=None, distance_mtype=None, flatten_hierarchy=False):
@@ -136,10 +137,13 @@ class DistanceFeatures(BaseTransformer):
         X_ind = X.index.droplevel(-1).unique()
 
         def _coerce_to_panel(x):
-            """Coerce hierarchical or pandel x to panel."""
+            """Coerce hierarchical or panel x to panel."""
             nlevels = x.index.nlevels
             if nlevels > 2:
-                return x.droplevel(list(range(nlevels - 2)))
+                inst_idx = x.index.droplevel(-1)
+                time_idx = x.index.get_level_values(-1)
+                flat_inst = flatten_multiindex(inst_idx)
+                return x.set_index([flat_inst, time_idx])
             else:
                 return x
 
@@ -148,9 +152,26 @@ class DistanceFeatures(BaseTransformer):
 
         distmat = distance(X, X_train)
 
-        if self.flatten_hierarchy:
-            X_ind = flatten_multiindex(X_ind)
+        if self.flatten_hierarchy and isinstance(X_train_ind, pd.MultiIndex):
+            X_train_ind = flatten_multiindex(X_train_ind)
 
         Xt = pd.DataFrame(distmat, columns=X_train_ind, index=X_ind)
 
         return Xt
+
+    @classmethod
+    def get_test_params(cls, parameter_set="default"):
+        """Return testing parameter settings for the estimator.
+
+        Parameters
+        ----------
+        parameter_set : str, default="default"
+
+        Returns
+        -------
+        params : dict or list of dict
+        """
+        return [
+            {"flatten_hierarchy": False},
+            {"flatten_hierarchy": True},
+        ]
