@@ -164,3 +164,29 @@ def test_is_hierarchical():
 
     assert result_true
     assert not result_false
+
+
+@pytest.mark.skipif(
+    not run_test_module_changed(["sktime.utils.multiindex"]),
+    reason="Run if multiindex module has changed.",
+)
+def test_apply_method_per_series_multi_char_keys():
+    """Test apply_method_per_series with multi-char string instance keys."""
+    from sktime.utils.multiindex import apply_method_per_series
+
+    idx = pd.MultiIndex.from_product(
+        [["AB", "CD"], pd.period_range("2024-01", periods=3, freq="M")],
+        names=["instance", "time"],
+    )
+    y = pd.DataFrame({"value": np.arange(6, dtype=float)}, index=idx)
+
+    # We apply a simple method, like mean, which returns a series/dataframe
+    # But to test the multiindex reconstruction, we need a method
+    # that keeps the time index like diff() or shift()
+    result = apply_method_per_series(y, "shift", periods=1)
+
+    assert isinstance(result.index, pd.MultiIndex)
+    assert result.index.nlevels == 2
+    assert result.index.names == ["instance", "time"]
+    assert "AB" in result.index.get_level_values(0)
+    assert "CD" in result.index.get_level_values(0)
