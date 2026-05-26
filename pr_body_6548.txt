@@ -1,0 +1,10 @@
+Fixes #6548
+Related to sktime/skpro#369
+
+This PR adds `sample_weight` support to all probabilistic forecasting metrics.
+
+Changes:
+- Added `sample_weight` to the `_BaseProbaForecastingErrorMetric` and `_BaseDistrForecastingMetric` evaluation workflows.
+- Extracted and validated weights using the standard `_apply_sample_weight_to_kwargs` method.
+- Replaced unweighted `mean()` aggregations with `np.average(..., weights=sample_weight)` when weights are provided.
+- Naturally inherited by all specific metrics (`PinballLoss`, `CRPS`, `LogLoss`, etc.) because their `_evaluate_by_index` functions successfully propagate `**kwargs`.
