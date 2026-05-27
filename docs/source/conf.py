@@ -568,12 +568,14 @@ def _make_estimator_overview(app):
     # with open("estimator_overview_table.md", "w") as file:
     #     df.to_markdown(file, index=False)
 
-    with open("_static/table_all.html", "w") as file:
+    with open(os.path.join(app.srcdir, "_static", "table_all.html"), "w") as file:
         df[
             ["Class Name", "Estimator Type", "Authors", "Maintainers", "Dependencies"]
         ].to_html(file, classes="pre-rendered", index=False, border=0, escape=False)
 
-    with open("_static/estimator_overview_db.json", "w") as file:
+    with open(
+        os.path.join(app.srcdir, "_static", "estimator_overview_db.json"), "w"
+    ) as file:
         df.to_json(file, orient="records")
     # pass
 
