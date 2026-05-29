@@ -36,7 +36,9 @@ for pr in prs:
     if status_result.stdout.strip():
         print("Auto-formatting made changes. Committing...")
         subprocess.run(["git", "add", "."], check=True)
-        subprocess.run(["git", "commit", "--no-verify", "-m", "style: run pre-commit"], check=True)
+        subprocess.run(
+            ["git", "commit", "--no-verify", "-m", "style: run pre-commit"], check=True
+        )
         subprocess.run(["git", "push"], check=True)
         print("Pushed changes.")
     else:
