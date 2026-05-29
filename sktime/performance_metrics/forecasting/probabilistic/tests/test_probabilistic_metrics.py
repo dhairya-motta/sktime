@@ -363,10 +363,10 @@ def test_empirical_coverage_boundary_equality(y_true_vals, lower_vals, upper_val
 def test_sample_weight_probabilistic(metric, score_average):
     """Test output contracts and correctness for sample_weight."""
     y_true = pd.Series([3, -0.5, 2, 7, 2])
-    
+
     loss = metric.create_test_instance()
     loss.set_params(score_average=score_average)
-    
+
     if loss.get_tag("scitype:y_pred") == "pred_interval":
         y_pred = pd.DataFrame(
             {
@@ -387,7 +387,7 @@ def test_sample_weight_probabilistic(metric, score_average):
 
     # 1. Without weights
     eval_loss_unweighted = loss(y_true, y_pred)
-    
+
     # 2. With weights
     eval_loss_weighted = loss(y_true, y_pred, sample_weight=weights)
 
